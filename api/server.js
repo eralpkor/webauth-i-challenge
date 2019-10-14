@@ -1,23 +1,24 @@
 const express = require('express');
 const helmet = require('helmet');
+const cors = require('cors');
 
-// const ProjectRouter = require('./api/projects/project-router.js');
-// const ResourceRouter = require('./api/resources/resource-router.js');
-// const TaskRouter = require('./api/tasks/task-router.js');
+const UsersRouter = require('./users/users-router.js');
+
+
 const server = express();
 
 server.use(helmet());
 server.use(express.json());
+server.use(cors());
 
 
 
 
 server.get('/', (req, res) => {
-  res.send('<h1>Web Auth Challenge</h1>');
+  res.send('<h1>Web Auth I Challenge</h1>');
 });
 
-server.use('/api/projects', ProjectRouter);
-server.use('/api/resources', ResourceRouter);
-server.use('/api/tasks', TaskRouter);
+server.use('/api', UsersRouter);
+
 
 module.exports = server;
