@@ -1,32 +1,47 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 
-const Users = require('./users-model.js');
+const User = require('./users-model.js');
 
 // login /api/login
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
-  
-})
 
-// POST /api/register
-router.post('/register', (req, res) => {
-  const { user } = req.body;
+  if (username && password) {
+    
 
-  if (user.username && user.password) {
-    const hash = bcrypt.hashSync(user.password, 8);
-    user.password = hash;
-
-    Users.add(user)
-      .then(save => {
-        res.status(201).json(save)
+    User.findBy({ username })
+      .first()
+      .then(user => {
+        res.status(201).json(user)
       })
       .catch(err => {
         console.log(err);
-        res.status(500).json({ message: 'There was an error...'})
+        res.status(500).json({ message: 'That name is used...'})
       })
   } else {
-    res.status(400).json({ message: 'Please add info...'});
+    res.status(400).json({ message: 'Please add user & pass info...'});
+  }
+});
+
+// POST /api/register
+router.post('/register', (req, res) => {
+  let { username, password } = req.body;
+
+  if (username && password) {
+    const hash = bcrypt.hashSync(password, 8);
+    password = hash;
+
+    User.add({ username, password })
+      .then(user => {
+        res.status(201).json(user)
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json({ message: 'That name is used...'})
+      })
+  } else {
+    res.status(400).json({ message: 'Please add user & pass info...'});
   }
 });
 
