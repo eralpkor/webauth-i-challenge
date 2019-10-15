@@ -12,7 +12,7 @@ const initialState = {
 const Login = (props) => {
   const [creds, setCreds] = useState(initialState);
   const [err, setErr] = useState(null);
-  const [users, setUsers] = useState([]);
+
   const handleChange = e => setCreds({...creds, [e.target.name]: e.target.value });
 
  
@@ -23,7 +23,6 @@ const Login = (props) => {
       .then(res => {
         console.log(res.data)
         setCreds(initialState)
-        setUsers(res.data)
       })
       .catch(err => {
         console.log(err)
