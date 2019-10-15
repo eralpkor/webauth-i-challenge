@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
+const restrict = require('../../auth/protected-middleware.js');
 
 const Users = require('./users-model.js');
 
@@ -44,6 +45,18 @@ router.post('/register', (req, res) => {
   } else {
     res.status(400).json({ message: 'Please add user & pass info...'});
   }
+});
+
+// Get /api/users
+router.get('/users', restrict, (req, res) => {
+  Users.find()
+    .then(users => {
+      res.json(users)
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ message: 'Error getting users...' });
+    });
 });
 
 module.exports = router;
