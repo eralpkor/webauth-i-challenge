@@ -1,19 +1,20 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 
-const User = require('./users-model.js');
+const Users = require('./users-model.js');
 
 // login /api/login
 router.post('/login', (req, res) => {
   const { username, password } = req.body;
 
   if (username && password) {
-    
-
-    User.findBy({ username })
-      .first()
+    Users.findByUsername(username)
       .then(user => {
-        res.status(201).json(user)
+        if (user && bcrypt.compareSync(password, user.password)) {
+          res.status(200).json(`Welcome back ${username} you're logged in!`)
+        } else {
+          res.status(401).json({ message: 'You cannot pass!!'})
+        }
       })
       .catch(err => {
         console.log(err);
@@ -32,7 +33,7 @@ router.post('/register', (req, res) => {
     const hash = bcrypt.hashSync(password, 8);
     password = hash;
 
-    User.add({ username, password })
+    Users.add({ username, password })
       .then(user => {
         res.status(201).json(user)
       })
