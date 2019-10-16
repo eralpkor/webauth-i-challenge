@@ -9,7 +9,7 @@ const initialState = {
 
 
 
-const Login = (props) => {
+const Login = ({history}) => {
   const [creds, setCreds] = useState(initialState);
   const [err, setErr] = useState(null);
 
@@ -19,10 +19,11 @@ const Login = (props) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    axios.post('http://localhost:4000/api/login', creds)
+    axios.post('http://localhost:4000/api/login', creds, { withCredentials: true })
       .then(res => {
         console.log(res.data)
-        setCreds(initialState)
+        setCreds(initialState);
+        history.push('/');
       })
       .catch(err => {
         console.log(err)
@@ -48,7 +49,6 @@ const Login = (props) => {
       />
       <button type='submit'>Login</button>
       {err && <div>{err}</div>}
-      {users && <div>{users}</div>}
     </form>
   )
 }

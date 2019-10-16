@@ -32,7 +32,10 @@ const server = express();
 
 server.use(helmet());
 server.use(express.json());
-server.use(cors());
+server.use(cors({
+  credentials: true,
+  origin: process.env.NODE_ENV === 'production' ? 'https://testsite.com' : 'http://localhost:3000'
+}));
 server.use(session(sessionConfig));
 
 server.get('/', (req, res) => {
